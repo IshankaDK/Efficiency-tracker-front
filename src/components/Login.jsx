@@ -16,7 +16,11 @@ const Login = () => {
             <div className="w-3/4 flex flex-row justify-between">
             </div>
             <div className="w-3/4 mt-4">
-                <button type="submit" className="py-4 bg-blue-400 w-full rounded text-blue-50 font-bold hover:bg-blue-700"> LOGIN</button>
+                <Link to='/dashboard'>
+                  <button type="button" className="py-4 bg-blue-400 w-full rounded text-blue-50 font-bold hover:bg-blue-700"
+                // onClick={}
+                > LOGIN</button>
+                </Link>
             </div>
             <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
               <span>Don't have an account?</span>
