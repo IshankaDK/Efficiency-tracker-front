@@ -6,7 +6,7 @@ const EmployerDashBoard = ({ children }) => {
   return (
     <>
       <EmployerHeader />
-      <div className="ove">{children}</div>
+      <div >{children}</div>
       <div className="fixed bottom-0 w-full">
         <Footer />
       </div>
