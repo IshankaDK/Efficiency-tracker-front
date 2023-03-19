@@ -72,6 +72,10 @@ function App() {
                   />
                 }
               />
+              <Route
+                path="/about"
+                element={<EmployerDashBoard children={<About />} />}
+              />
             </>
           ) : (
             <>
@@ -88,7 +92,7 @@ function App() {
                   />
                 }
               />
-               <Route
+              <Route
                 path="/my-tasks"
                 element={
                   <EmployeeDashBoard
@@ -124,12 +128,12 @@ function App() {
                   />
                 }
               />
+              <Route
+                path="/about"
+                element={<EmployeeDashBoard children={<About />} />}
+              />
             </>
           )}
-          <Route
-            path="/about"
-            element={<EmployerDashBoard children={<About />} />}
-          />
         </Routes>
       </BrowserRouter>
     </>
