@@ -1,4 +1,5 @@
 import React from "react";
+import PageHeader from "../PageHeader";
 const employeeData = [
   {
     id: 1,
@@ -51,6 +52,9 @@ const employeeData = [
 ];
 const EmployeeList = () => {
   return (
+    <>
+    <PageHeader title={"Employee List"}/>
+    
     <div className="flex flex-wrap justify-center">
       {employeeData.map((employee) => (
         <div
@@ -86,6 +90,7 @@ const EmployeeList = () => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 
