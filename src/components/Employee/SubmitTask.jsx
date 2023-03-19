@@ -1,8 +1,11 @@
 import React from 'react'
+import PageHeader from '../PageHeader'
 
 const SubmitTask = () => {
   return (
-    <div>SubmitTask</div>
+    <>
+    <PageHeader title={"Submit Task"}/>
+    </>
   )
 }
 
