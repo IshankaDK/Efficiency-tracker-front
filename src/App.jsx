@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { SnackbarProvider } from "notistack";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./components/About";
@@ -14,8 +15,13 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 
 function App() {
-  // const userRole = "Employer";
-  const userRole = "Employee";
+  const [currentUserRole, setCurrentUserRole] = useState(
+    localStorage.getItem("role")
+  );
+  useEffect(() => {
+    setCurrentUserRole(localStorage.getItem("role"));
+    console.log(currentUserRole);
+  }, []);
   return (
     <>
       <SnackbarProvider maxSnack={3} autoHideDuration={2500}>
@@ -23,21 +29,34 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<SignUp />} />
-            {userRole === "Employer" ? (
-              <>
-                <Route
-                  path="/dashboard"
-                  element={
-                    <EmployerDashBoard
-                      children={
-                        <>
-                          <WelcomeNote />
-                          <AllTasks />
-                        </>
-                      }
-                    />
+            <Route
+              path="/dashboard-employer"
+              element={
+                <EmployerDashBoard
+                  children={
+                    <>
+                      <WelcomeNote />
+                      <AllTasks />
+                    </>
                   }
                 />
+              }
+            />{" "}
+            <Route
+              path="/dashboard-employee"
+              element={
+                <EmployeeDashBoard
+                  children={
+                    <>
+                      <WelcomeNote />
+                      <MyTask />
+                    </>
+                  }
+                />
+              }
+            />
+            {currentUserRole === "Employer" && (
+              <>
                 <Route
                   path="/create-task"
                   element={
@@ -79,21 +98,9 @@ function App() {
                   element={<EmployerDashBoard children={<About />} />}
                 />
               </>
-            ) : (
+            )}
+            {currentUserRole === "Employee" && (
               <>
-                <Route
-                  path="/dashboard"
-                  element={
-                    <EmployeeDashBoard
-                      children={
-                        <>
-                          <WelcomeNote />
-                          <MyTask />
-                        </>
-                      }
-                    />
-                  }
-                />
                 <Route
                   path="/my-tasks"
                   element={

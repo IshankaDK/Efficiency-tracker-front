@@ -48,7 +48,7 @@ const SignUp = () => {
               name="name"
               id="name"
               className="w-full py-4 px-8 bg-slate-200 placeholder:font-semibold rounded hover:ring-1 outline-blue-500"
-              placeholder="Name"
+              placeholder="User Name"
               onChange={handleChange}
             />
           </div>
@@ -82,8 +82,8 @@ const SignUp = () => {
               <option disabled value="">
                 Select a role
               </option>
-              <option value="employer">Employer</option>
-              <option value="employee">Employee</option>
+              <option value="Employer">Employer</option>
+              <option value="Employee">Employee</option>
             </select>
           </div>
 
