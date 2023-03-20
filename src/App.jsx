@@ -1,3 +1,4 @@
+import { SnackbarProvider } from "notistack";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./components/About";
 import EmployeeDashBoard from "./components/Employee/EmployeeDashBoard";
@@ -17,125 +18,127 @@ function App() {
   const userRole = "Employee";
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
-          {userRole === "Employer" ? (
-            <>
-              <Route
-                path="/dashboard"
-                element={
-                  <EmployerDashBoard
-                    children={
-                      <>
-                        <WelcomeNote />
-                        <AllTasks />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/create-task"
-                element={
-                  <EmployerDashBoard
-                    children={
-                      <>
-                        <CreateTask />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/all-tasks"
-                element={
-                  <EmployerDashBoard
-                    children={
-                      <>
-                        <AllTasks />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/employees"
-                element={
-                  <EmployerDashBoard
-                    children={
-                      <>
-                        <EmployeeList />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/about"
-                element={<EmployerDashBoard children={<About />} />}
-              />
-            </>
-          ) : (
-            <>
-              <Route
-                path="/dashboard"
-                element={
-                  <EmployeeDashBoard
-                    children={
-                      <>
-                        <WelcomeNote />
-                        <MyTask />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/my-tasks"
-                element={
-                  <EmployeeDashBoard
-                    children={
-                      <>
-                        <MyTask />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/submit-task"
-                element={
-                  <EmployeeDashBoard
-                    children={
-                      <>
-                        <SubmitTask />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <EmployeeDashBoard
-                    children={
-                      <>
-                        <Profile />
-                      </>
-                    }
-                  />
-                }
-              />
-              <Route
-                path="/about"
-                element={<EmployeeDashBoard children={<About />} />}
-              />
-            </>
-          )}
-        </Routes>
-      </BrowserRouter>
+      <SnackbarProvider maxSnack={3} autoHideDuration={2500}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<SignUp />} />
+            {userRole === "Employer" ? (
+              <>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <EmployerDashBoard
+                      children={
+                        <>
+                          <WelcomeNote />
+                          <AllTasks />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/create-task"
+                  element={
+                    <EmployerDashBoard
+                      children={
+                        <>
+                          <CreateTask />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/all-tasks"
+                  element={
+                    <EmployerDashBoard
+                      children={
+                        <>
+                          <AllTasks />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/employees"
+                  element={
+                    <EmployerDashBoard
+                      children={
+                        <>
+                          <EmployeeList />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/about"
+                  element={<EmployerDashBoard children={<About />} />}
+                />
+              </>
+            ) : (
+              <>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <EmployeeDashBoard
+                      children={
+                        <>
+                          <WelcomeNote />
+                          <MyTask />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/my-tasks"
+                  element={
+                    <EmployeeDashBoard
+                      children={
+                        <>
+                          <MyTask />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/submit-task"
+                  element={
+                    <EmployeeDashBoard
+                      children={
+                        <>
+                          <SubmitTask />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <EmployeeDashBoard
+                      children={
+                        <>
+                          <Profile />
+                        </>
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/about"
+                  element={<EmployeeDashBoard children={<About />} />}
+                />
+              </>
+            )}
+          </Routes>
+        </BrowserRouter>
+      </SnackbarProvider>
     </>
   );
 }
