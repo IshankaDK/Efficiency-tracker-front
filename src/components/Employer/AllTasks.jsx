@@ -1,62 +1,17 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { baseURL } from "../../apiURL";
 import PageHeader from "../PageHeader";
-const tasks = [
-  {
-    id: 1,
-    employeeName: "John Doe",
-    employeeImage: "https://picsum.photos/id/1/150",
-    taskTitle: "Complete project report",
-    taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    dateSubmitted: "2023-03-17",
-  },
-  {
-    id: 2,
-    employeeName: "Jane Smith",
-    employeeImage: "https://picsum.photos/id/1/150",
-    taskTitle: "Prepare presentation slides",
-    taskDescription:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    dateSubmitted: "2023-03-16",
-  },
-  {
-    id: 3,
-    employeeName: "Jane Smith",
-    employeeImage: "https://picsum.photos/id/1/150",
-    taskTitle: "Prepare presentation slides",
-    taskDescription:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    dateSubmitted: "2023-03-16",
-  },
-  {
-    id: 4,
-    employeeName: "Jane Smith",
-    employeeImage: "https://picsum.photos/id/1/150",
-    taskTitle: "Prepare presentation slides",
-    taskDescription:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    dateSubmitted: "2023-03-16",
-  },
-  {
-    id: 5,
-    employeeName: "Jane Smith",
-    employeeImage: "https://picsum.photos/id/1/150",
-    taskTitle: "Prepare presentation slides",
-    taskDescription:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    dateSubmitted: "2023-03-16",
-  },
-  {
-    id: 6,
-    employeeName: "Jane Smith",
-    employeeImage: "https://picsum.photos/id/1/150",
-    taskTitle: "Prepare presentation slides",
-    taskDescription:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    dateSubmitted: "2023-03-16",
-  },
-  // add more tasks here as needed
-];
+
 const AllTasks = () => {
+  const [tasks, setTasks] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/task`)
+      .then((res) => res.data && setTasks(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
       <PageHeader title={"All Task"} />
@@ -66,17 +21,29 @@ const AllTasks = () => {
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center">
                 <img
-                  src={task.employeeImage}
+                  src={`https://picsum.photos/id/1/150`}
                   alt={task.employeeName}
                   className="w-16 h-216 rounded-full mr-2"
                 />
                 <span className="text-xl font-bold">{task.employeeName}</span>
               </div>
-              <span className="text-base font-bold">{task.dateSubmitted}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-semibold">
+                  {"Submission Date : "}
+                </span>
+                <span className="text-xl font-bold">{task.submissionDate}</span>
+              </div>
             </div>
             <div className="mb-4">
-              <h3 className="text-lg font-medium">{task.taskTitle}</h3>
-              <p className="text-gray-600 mt-2">{task.taskDescription}</p>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-semibold">
+                  {"Task Name : "}
+                </span>
+                <span className="text-xl font-bold">{task.taskName}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-gray-600 font-bold">{task.desc}</p>
+              </div>
             </div>
           </div>
         ))}
