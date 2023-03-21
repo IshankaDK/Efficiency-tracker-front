@@ -20,7 +20,6 @@ function App() {
   );
   useEffect(() => {
     setCurrentUserRole(localStorage.getItem("role"));
-    console.log(currentUserRole);
   }, []);
   return (
     <>
