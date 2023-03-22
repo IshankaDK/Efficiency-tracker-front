@@ -23,6 +23,7 @@ const Login = () => {
       .then((res) => {
         if (res.status === 200) {
           localStorage.setItem("role", res.data.role);
+          localStorage.setItem("user", res.data._id);
           if (res.data.role === "Employer") {
             navigate("/dashboard-employer");
           } else if (res.data.role === "Employee") {
