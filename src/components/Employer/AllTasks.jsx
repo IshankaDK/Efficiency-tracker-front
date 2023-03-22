@@ -17,7 +17,7 @@ const AllTasks = () => {
       <PageHeader title={"All Task"} />
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 m-4">
         {tasks.map((task) => (
-          <div key={task.id} className="p-4 bg-gray-200 rounded-lg shadow-lg">
+          <div key={task._id} className="p-4 bg-gray-200 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center">
                 <img
