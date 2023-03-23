@@ -15,12 +15,12 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 
 function App() {
-  const [currentUserRole, setCurrentUserRole] = useState(
-    localStorage.getItem("role")
-  );
-  useEffect(() => {
-    setCurrentUserRole(localStorage.getItem("role"));
-  }, []);
+  // const [currentUserRole, setCurrentUserRole] = useState(
+  //   localStorage.getItem("role")
+  // );
+  // useEffect(() => {
+  //   setCurrentUserRole(localStorage.getItem("role"));
+  // }, []);
   return (
     <>
       <SnackbarProvider maxSnack={3} autoHideDuration={2500}>
@@ -54,7 +54,7 @@ function App() {
                 />
               }
             />
-            {currentUserRole === "Employer" && (
+            {/* {currentUserRole === "Employer" && ( */}
               <>
                 <Route
                   path="/create-task"
@@ -97,8 +97,8 @@ function App() {
                   element={<EmployerDashBoard children={<About />} />}
                 />
               </>
-            )}
-            {currentUserRole === "Employee" && (
+            {/* )} */}
+            {/* {currentUserRole === "Employee" && ( */}
               <>
                 <Route
                   path="/my-tasks"
@@ -141,7 +141,7 @@ function App() {
                   element={<EmployeeDashBoard children={<About />} />}
                 />
               </>
-            )}
+            {/* )} */}
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>
