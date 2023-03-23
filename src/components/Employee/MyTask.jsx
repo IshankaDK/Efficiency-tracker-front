@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PageHeader from "../PageHeader";
 import { baseURL } from "../../apiURL";
 import Task from "./Task";
@@ -60,6 +60,58 @@ const TaskCard = ({ task, getAllTasks }) => {
     setOpen(true);
   };
 
+  const [timerCount, setTimerCount] = useState(task.spendTime || 0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  const startTimer = () => {
+    if (!isTimerRunning) {
+      setIsTimerRunning(true);
+      intervalRef.current = setInterval(() => {
+        setTimerCount((prevCount) => prevCount + 1);
+      }, 1000);
+    }
+  };
+
+  const pauseTimer = () => {
+    if (isTimerRunning) {
+      clearInterval(intervalRef.current);
+      setIsTimerRunning(false);
+    }
+  };
+
+  const continueTimer = () => {
+    if (!isTimerRunning) {
+      setIsTimerRunning(true);
+      intervalRef.current = setInterval(() => {
+        setTimerCount((prevCount) => prevCount + 1);
+      }, 1000);
+    }
+  };
+
+  const stopTimer = () => {
+    clearInterval(intervalRef.current);
+    setIsTimerRunning(false);
+    setTimerCount(task.spendTime);
+  };
+
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   return (
     <>
       <div
@@ -73,6 +125,10 @@ const TaskCard = ({ task, getAllTasks }) => {
             {task.desc}
           </p>
         </div>
+        <div className="px-6 py-2 space-y-2">
+          <span>Time spent : </span>
+          <span className="font-semibold">{formatTime(timerCount)}</span>
+        </div>
         <div
           className={`bg-gray-200 px-6 py-4 ${statusColor} relative bottom-0`}
         >
@@ -81,7 +137,18 @@ const TaskCard = ({ task, getAllTasks }) => {
           </p>
         </div>
       </div>
-      <Task task={task} open={open} handleClose={handleClose} getAllTasks={getAllTasks}/>
+      <Task
+        task={task}
+        open={open}
+        handleClose={handleClose}
+        getAllTasks={getAllTasks}
+        startTimer={startTimer}
+        pauseTimer={pauseTimer}
+        continueTimer={continueTimer}
+        stopTimer={stopTimer}
+        timerCount={formatTime(timerCount)}
+        status={status}
+      />
     </>
   );
 };

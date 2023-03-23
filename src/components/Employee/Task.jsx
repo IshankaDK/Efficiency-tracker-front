@@ -6,7 +6,18 @@ import axios from "axios";
 import { baseURL } from "../../apiURL";
 import { useSnackbar } from "notistack";
 
-const Task = ({ task, open, handleClose, getAllTasks }) => {
+const Task = ({
+  task,
+  open,
+  handleClose,
+  getAllTasks,
+  startTimer,
+  pauseTimer,
+  continueTimer,
+  stopTimer,
+  timerCount,
+  status
+}) => {
   const { enqueueSnackbar } = useSnackbar();
 
   function getFormattedDate() {
@@ -18,7 +29,6 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    console.log(formattedDate, "  fo");
     return formattedDate;
   }
 
@@ -33,6 +43,7 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
           enqueueSnackbar("Task started.", {
             variant: "success",
           });
+          startTimer();
           getAllTasks();
         }
       })
@@ -55,6 +66,7 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
           enqueueSnackbar("Task paused.", {
             variant: "success",
           });
+          pauseTimer();
           getAllTasks();
         }
       })
@@ -77,6 +89,7 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
           enqueueSnackbar("Task start again.", {
             variant: "success",
           });
+          continueTimer();
           getAllTasks();
         }
       })
@@ -100,6 +113,7 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
           enqueueSnackbar("Task stopped.", {
             variant: "success",
           });
+          stopTimer();
           getAllTasks();
         }
       })
@@ -158,13 +172,21 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
                 Download Attachment
               </Link>
             )}
+            <div>
+              <span>Time spent : </span>
+              <span className="font-semibold">{timerCount}</span>
+            </div>
+            <div>
+              <span>Task status : </span>
+              <span className="font-semibold">{status.toUpperCase()}</span>
+            </div>
             <div className="flex justify-between mt-4">
               {!task.isTaskStart ? (
                 <button
                   onClick={() => {
                     taskStart();
                   }}
-                  disabled={task.isTaskStart}
+                  disabled={task.isTaskComplete || task.isTaskStart}
                   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
                 >
                   Start
@@ -174,7 +196,9 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
                   onClick={() => {
                     continueTask();
                   }}
-                  disabled={task.isTaskStart && !task.isPause}
+                  disabled={
+                    task.isTaskComplete || (task.isTaskStart && !task.isPause)
+                  }
                   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
                 >
                   Continue
@@ -182,7 +206,7 @@ const Task = ({ task, open, handleClose, getAllTasks }) => {
               )}
               <button
                 onClick={() => taskPause()}
-                disabled={task.isPause}
+                disabled={task.isTaskComplete || task.isPause}
                 className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               >
                 Pause
