@@ -35,7 +35,7 @@ const EmployeeList = () => {
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
               <img
                 className="w-full h-48 object-cover object-center "
-                src={`https://randomuser.me/api/portraits/men/75.jpg`}
+                src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100) + 1}.jpg`}
                 alt={`${employee.username}`}
               />
               <div className="py-4 px-6">
