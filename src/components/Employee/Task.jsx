@@ -222,8 +222,11 @@ const Task = ({
               </button>
             </div>
           </div>
-          {openCamera && open  ? (
-            <Webcam openCamera={openCamera} closeCamera={setOpenCamera} />
+          {openCamera && open ? (
+            <Webcam
+              openCamera={openCamera}
+              closeCamera={() => setOpenCamera(false)}
+            />
           ) : (
             false
           )}
@@ -235,12 +238,12 @@ const Task = ({
 
 export default Task;
 
-const Webcam = () => {
+const Webcam = ({ openCamera, closeCamera }) => {
   const videoRef = useRef();
   const canvasRef = useRef();
   const [photo, setPhoto] = useState(null);
 
-  const handleCaptureClick = () => {
+  const handleCaptureClick = async () => {
     const canvas = canvasRef.current;
     const video = videoRef.current;
     canvas.width = video.videoWidth;
@@ -249,24 +252,55 @@ const Webcam = () => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const dataUrl = canvas.toDataURL();
     setPhoto(dataUrl);
-    const stream = video.srcObject;
-    const tracks = stream.getTracks();
+    stopStream();
+  };
+
+  const stopStream = async () => {
+    const stream = await videoRef.current.srcObject;
+    const tracks = await stream.getTracks();
     tracks.forEach((track) => {
       track.stop();
     });
+    videoRef.current.srcObject = null;
   };
 
   navigator.mediaDevices
     .getUserMedia({ video: true })
     .then((stream) => {
-      videoRef.current.srcObject = stream;
-      videoRef.current.play();
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
     })
     .catch((err) => console.error(err));
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2">
-  
+    <Dialog
+      open={openCamera}
+      onClose={async () => {
+        await stopStream();
+        await closeCamera();
+      }}
+    >
+      <DialogTitle id="alert-dialog-title">
+        <span className="font-bold">{"Capture Image"}</span>
+        <IconButton
+          aria-label="close"
+          onClick={async () => {
+            await stopStream();
+            await closeCamera();
+          }}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent className="flex flex-col justify-center items-center gap-2">
         <video ref={videoRef} />
         <canvas ref={canvasRef} style={{ display: "none" }} />
         <button
@@ -280,13 +314,18 @@ const Webcam = () => {
             <img src={photo} />
             <button
               className="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
-              onClick={()=>console.log("call modal here")}
+              onClick={() => {
+                console.log("call modal here");
+                // stopStream();
+                // closeCamera();
+              }}
             >
               Send
             </button>
           </>
-        )}
-    </div>
+        )}{" "}
+      </DialogContent>
+    </Dialog>
   );
 };
 
