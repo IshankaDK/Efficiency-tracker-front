@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
@@ -16,9 +16,11 @@ const Task = ({
   continueTimer,
   stopTimer,
   timerCount,
-  status
+  status,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
+
+  const [openCamera, setOpenCamera] = useState(false);
 
   function getFormattedDate() {
     const date = new Date();
@@ -172,10 +174,7 @@ const Task = ({
                 Download Attachment
               </Link>
             )}
-            <div>
-              <span>Time spent : </span>
-              <span className="font-semibold">{timerCount}</span>
-            </div>
+            <Timer timerCount={timerCount} />
             <div>
               <span>Task status : </span>
               <span className="font-semibold">{status.toUpperCase()}</span>
@@ -205,7 +204,10 @@ const Task = ({
                 </button>
               )}
               <button
-                onClick={() => taskPause()}
+                onClick={() => {
+                  setOpenCamera(true);
+                  taskPause();
+                }}
                 disabled={task.isTaskComplete || task.isPause}
                 className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               >
@@ -220,6 +222,11 @@ const Task = ({
               </button>
             </div>
           </div>
+          {openCamera && open  ? (
+            <Webcam openCamera={openCamera} closeCamera={setOpenCamera} />
+          ) : (
+            false
+          )}
         </div>
       </DialogContent>
     </Dialog>
@@ -227,3 +234,67 @@ const Task = ({
 };
 
 export default Task;
+
+const Webcam = () => {
+  const videoRef = useRef();
+  const canvasRef = useRef();
+  const [photo, setPhoto] = useState(null);
+
+  const handleCaptureClick = () => {
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL();
+    setPhoto(dataUrl);
+    const stream = video.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach((track) => {
+      track.stop();
+    });
+  };
+
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then((stream) => {
+      videoRef.current.srcObject = stream;
+      videoRef.current.play();
+    })
+    .catch((err) => console.error(err));
+
+  return (
+    <div className="flex flex-col justify-center items-center gap-2">
+  
+        <video ref={videoRef} />
+        <canvas ref={canvasRef} style={{ display: "none" }} />
+        <button
+          className="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+          onClick={handleCaptureClick}
+        >
+          Capture
+        </button>
+        {photo && (
+          <>
+            <img src={photo} />
+            <button
+              className="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+              onClick={()=>console.log("call modal here")}
+            >
+              Send
+            </button>
+          </>
+        )}
+    </div>
+  );
+};
+
+const Timer = ({ timerCount }) => {
+  return (
+    <div>
+      <span>Time spent : </span>
+      <span className="font-semibold">{timerCount}</span>
+    </div>
+  );
+};
