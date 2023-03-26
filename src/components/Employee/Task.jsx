@@ -208,14 +208,16 @@ const Task = ({
                   setOpenCamera(true);
                   taskPause();
                 }}
-                disabled={task.isTaskComplete || task.isPause}
+                disabled={
+                  task.isTaskComplete || task.isPause || !task.isTaskStart
+                }
                 className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               >
                 Pause
               </button>
               <button
                 onClick={() => stopTask()}
-                disabled={task.isTaskComplete}
+                disabled={task.isTaskComplete || !task.isTaskStart}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               >
                 Stop
