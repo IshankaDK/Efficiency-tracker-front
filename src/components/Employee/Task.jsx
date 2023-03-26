@@ -226,6 +226,7 @@ const Task = ({
             <Webcam
               openCamera={openCamera}
               closeCamera={() => setOpenCamera(false)}
+              continueTask={continueTask}
             />
           ) : (
             false
@@ -238,7 +239,7 @@ const Task = ({
 
 export default Task;
 
-const Webcam = ({ openCamera, closeCamera }) => {
+const Webcam = ({ openCamera, closeCamera, continueTask }) => {
   const videoRef = useRef();
   const canvasRef = useRef();
   const [photo, setPhoto] = useState(null);
@@ -273,6 +274,40 @@ const Webcam = ({ openCamera, closeCamera }) => {
       }
     })
     .catch((err) => console.error(err));
+
+  const { enqueueSnackbar } = useSnackbar();
+  const checkEmotion = async () => {
+    await axios
+      .post(`${baseURL}/ml/emotion-recognition`, {
+        image: photo.split(",")[1],
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          const emotion = res.data[0].emotion;
+          if (
+            emotion === "Sad" ||
+            emotion === "Angry" ||
+            emotion === "Disgust"
+          ) {
+            enqueueSnackbar(`Take a rest. You look ${emotion}`, {
+              variant: "warning",
+            });
+            closeCamera();
+          } else {
+            closeCamera();
+            continueTask();
+            enqueueSnackbar(`No Negative emotion detected. Keep Working.!`, {
+              variant: "error",
+            });
+          }
+          console.log(res.data[0].emotion);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Dialog
@@ -315,9 +350,7 @@ const Webcam = ({ openCamera, closeCamera }) => {
             <button
               className="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               onClick={() => {
-                console.log("call modal here");
-                // stopStream();
-                // closeCamera();
+                checkEmotion();
               }}
             >
               Send
