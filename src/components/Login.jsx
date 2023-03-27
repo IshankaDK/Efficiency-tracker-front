@@ -24,9 +24,9 @@ const Login = () => {
         if (res.status === 200) {
           localStorage.setItem("role", res.data.role);
           localStorage.setItem("user", res.data._id);
-          if (res.data.role === "Employer") {
+          if (res.data.role === "employer") {
             navigate("/dashboard-employer");
-          } else if (res.data.role === "Employee") {
+          } else if (res.data.role === "employee") {
             navigate("/dashboard-employee");
           }else{
             navigate("/");

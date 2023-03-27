@@ -82,8 +82,8 @@ const SignUp = () => {
               <option disabled value="">
                 Select a role
               </option>
-              <option value="Employer">Employer</option>
-              <option value="Employee">Employee</option>
+              <option value="employer">Employer</option>
+              <option value="employee">Employee</option>
             </select>
           </div>
 
