@@ -23,7 +23,7 @@ function App() {
   // }, []);
   return (
     <>
-      <SnackbarProvider maxSnack={3} autoHideDuration={2500}>
+      <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
