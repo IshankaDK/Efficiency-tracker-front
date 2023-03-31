@@ -179,6 +179,10 @@ const Task = ({
               <span>Task status : </span>
               <span className="font-semibold">{status.toUpperCase()}</span>
             </div>
+            {task.feedback && <div>
+              <span>Task Feedback : </span>
+              <span className="font-semibold">{task.feedback}</span>
+            </div>}
             <div className="flex justify-between mt-4">
               {!task.isTaskStart ? (
                 <button

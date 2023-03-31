@@ -66,7 +66,7 @@ const Task = ({ task }) => {
       {open && (
         <TaskDetailsDialog
           open={open}
-          onClose={() => setOpen(false)}
+          onClose={() => (setOpen(false), AllTasks())}
           task={task}
         />
       )}

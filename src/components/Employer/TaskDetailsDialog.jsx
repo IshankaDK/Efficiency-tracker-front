@@ -12,10 +12,12 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { baseURL } from "../../apiURL";
+import { useSnackbar } from "notistack";
 
 const TaskDetailsDialog = ({ open, onClose, task }) => {
   const [feedback, setFeedback] = useState("");
   const [name, setName] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleFeedbackChange = (e) => {
     setFeedback(e.target.value);
@@ -29,6 +31,23 @@ const TaskDetailsDialog = ({ open, onClose, task }) => {
       .then((res) => {
         if (res.status == 200) {
           setName(res.data.username);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const submitFeedback = async () => {
+    await axios
+      .put(`${baseURL}/task/update_feedback`, {
+        id: task._id,
+        feedback: feedback,
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          enqueueSnackbar("Feedback submitted.", {
+            variant: "success",
+          });
+          onClose();
         }
       })
       .catch((err) => console.log(err));
@@ -53,9 +72,20 @@ const TaskDetailsDialog = ({ open, onClose, task }) => {
     statusColor = "text-gray-500";
     status = "todo";
   }
-
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  };
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm">
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle id="alert-dialog-title">
         <span className="font-bold">{task.taskName}</span>
         <IconButton
@@ -83,31 +113,46 @@ const TaskDetailsDialog = ({ open, onClose, task }) => {
             Status:{" "}
             <strong className={statusColor}>{status.toUpperCase()}</strong>
           </p>
-          <p>Employee Name: {name}</p>
+          <p>
+            Employee Name: <strong>{name}</strong>
+          </p>
+          <p>
+            Time spend: <strong>{formatTime(task.spendTime)}</strong>
+          </p>
+          <p>
+            Additional Info: <strong>{task.additionalInfo ? task.additionalInfo : "-" }</strong>
+          </p>
+          <p>
+            Feedback: <strong>{task.feedback ? task.feedback : "-" }</strong>
+          </p>
         </DialogContentText>
-        <TextField
-          label="Feedback"
-          fullWidth
-          multiline
-          rows={4}
-          variant="outlined"
-          value={feedback}
-          onChange={handleFeedbackChange}
-        />
+        {task.submitted && task.feedback == null && (
+          <TextField
+            label="Feedback"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            value={feedback}
+            onChange={handleFeedbackChange}
+          />
+        )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Close</Button>
-        <Button
-          variant="contained"
-          disabled={status !== "completed"}
-          onClick={() => {
-            submitFeedback(feedback);
-            onClose();
-          }}
-        >
-          Submit Feedback
-        </Button>
-      </DialogActions>
+      {task.submitted && task.feedback == null && (
+        <DialogActions>
+          <Button onClick={onClose}>Close</Button>
+          <Button
+            variant="contained"
+            disabled={status !== "completed"}
+            onClick={() => {
+              submitFeedback(feedback);
+              onClose();
+            }}
+          >
+            Submit Feedback
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };
