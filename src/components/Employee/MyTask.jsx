@@ -3,6 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import PageHeader from "../PageHeader";
 import { baseURL } from "../../apiURL";
 import Task from "./Task";
+import TakeABreak from "../../assets/take_a_break.mp3";
+import { useSnackbar } from "notistack";
 
 const MyTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -71,6 +73,7 @@ const TaskCard = ({ task, getAllTasks }) => {
   const startTimer = () => {
     if (!isTimerRunning) {
       setIsTimerRunning(true);
+      playSound();
       intervalRef.current = setInterval(() => {
         setTimerCount((prevCount) => prevCount + 1);
       }, 1000);
@@ -79,6 +82,7 @@ const TaskCard = ({ task, getAllTasks }) => {
 
   const pauseTimer = () => {
     if (isTimerRunning) {
+      playSound();
       clearInterval(intervalRef.current);
       setIsTimerRunning(false);
     }
@@ -87,6 +91,7 @@ const TaskCard = ({ task, getAllTasks }) => {
   const continueTimer = () => {
     if (!isTimerRunning) {
       setIsTimerRunning(true);
+      playSound();
       intervalRef.current = setInterval(() => {
         setTimerCount((prevCount) => prevCount + 1);
       }, 1000);
@@ -96,6 +101,7 @@ const TaskCard = ({ task, getAllTasks }) => {
   const stopTimer = () => {
     clearInterval(intervalRef.current);
     setIsTimerRunning(false);
+    playSound();
     setTimerCount(task.spendTime);
   };
 
@@ -112,6 +118,24 @@ const TaskCard = ({ task, getAllTasks }) => {
     return `${hours}:${minutes}:${seconds}`;
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+  const [intervalId, setIntervalId] = useState(null);
+  const playSound = () => {
+    if (!intervalId) {
+      const id = setInterval(() => {
+        // play sound
+        const audio = new Audio(TakeABreak);
+        audio.play();
+        enqueueSnackbar(`Look away from the screen. You work 30 minutes straight.`, {
+          variant: "warning",
+        });
+      }, 5 * 60 * 1000); // 5 minutes in milliseconds
+      setIntervalId(id);
+    } else {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+  };
   return (
     <>
       <div

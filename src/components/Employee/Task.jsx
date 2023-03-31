@@ -290,7 +290,7 @@ const Webcam = ({ openCamera, closeCamera, continueTask }) => {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          const emotion = res.data[0].emotion;
+          const emotion = res.data[0]?.emotion;
           if (
             emotion === "Sad" ||
             emotion === "Angry" ||
