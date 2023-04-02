@@ -20,17 +20,11 @@ const CreateTask = () => {
       taskName,
       desc,
       submissionDate: dueDate,
+      attachment:attachment
     };
-    const formData = new FormData();
 
-    formData.append("data", JSON.stringify(data));
-    formData.append("attachment", attachment);
     axios
-      .post(`${baseURL}/task/create`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(`${baseURL}/task/create`, data)
       .then(
         (res) =>
           res.status == 200 &&
@@ -115,10 +109,11 @@ const CreateTask = () => {
             Attachment
           </label>
           <input
-            type="file"
+            type="text"
             id="attachment"
             name="attachment"
-            onChange={(e) => setAttachment(e.target.files[0])}
+            onChange={(e) => setAttachment(e.target.value)}
+            placeholder="Upload your files to a cloud storage and paste the link here"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
