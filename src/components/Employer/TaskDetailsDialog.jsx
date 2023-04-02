@@ -127,7 +127,7 @@ const TaskDetailsDialog = ({ open, onClose, task }) => {
           {task.submittedFiles && (
             <p>
               Submitted Files:{" "}
-              <Link target="_blank" className="font-bold">{task.submittedFiles}</Link>
+              <Link target="_blank" className="font-bold" to={task.submittedFiles}>See Submitted Files</Link>
             </p>
           )}
          {task.feedback && <p>
