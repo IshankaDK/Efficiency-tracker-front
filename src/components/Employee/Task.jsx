@@ -295,15 +295,15 @@ const Webcam = ({ openCamera, closeCamera, continueTask }) => {
             emotion === "Angry" ||
             emotion === "Disgust"
           ) {
-            enqueueSnackbar(`Take a rest. You look ${emotion}`, {
-              variant: "warning",
+            enqueueSnackbar(`Negative emotion has detected. Take a rest.!`, {
+              variant: "error",
             });
             closeCamera();
           } else {
             closeCamera();
             continueTask();
             enqueueSnackbar(`No Negative emotion detected. Keep Working.!`, {
-              variant: "error",
+              variant: "warning",
             });
           }
           console.log(res.data[0].emotion);
