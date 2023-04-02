@@ -8,6 +8,7 @@ const SubmitTask = () => {
   const [tasks, setTasks] = useState([]);
   const [taskDetails, setTaskDetails] = useState({});
   const [info, setInfo] = useState(null);
+  const [files, setFiles] = useState(null);
 
   useEffect(() => {
     getCompleteTasks();
@@ -48,6 +49,7 @@ const SubmitTask = () => {
       .put(`${baseURL}/task/additional_info`, {
         id: taskDetails._id,
         info: info,
+        submittedFiles:files
       })
       .then((response) => {
         console.log(response);
@@ -104,8 +106,19 @@ const SubmitTask = () => {
             </strong>
           </p>
         </div>
-
-        {/* Additional information section */}
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="info" className="text-lg font-medium">
+            Your files
+          </label>
+          <input
+            id="files"
+            name="files"
+            className="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            onChange={(e) => setFiles(e.target.value)}
+            placeholder="Upload your files to a cloud storage and paste the link here"
+            
+          />
+        </div>
         <div className="flex flex-col space-y-2">
           <label htmlFor="info" className="text-lg font-medium">
             Additional Information
@@ -119,7 +132,6 @@ const SubmitTask = () => {
           ></textarea>
         </div>
 
-        {/* Submit button */}
         <button
           onClick={() => {
             submitInfo();
