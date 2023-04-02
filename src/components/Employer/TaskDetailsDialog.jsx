@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { baseURL } from "../../apiURL";
 import { useSnackbar } from "notistack";
+import { Link } from "react-router-dom";
 
 const TaskDetailsDialog = ({ open, onClose, task }) => {
   const [feedback, setFeedback] = useState("");
@@ -120,11 +121,18 @@ const TaskDetailsDialog = ({ open, onClose, task }) => {
             Time spend: <strong>{formatTime(task.spendTime)}</strong>
           </p>
           <p>
-            Additional Info: <strong>{task.additionalInfo ? task.additionalInfo : "-" }</strong>
+            Additional Info:{" "}
+            <strong>{task.additionalInfo ? task.additionalInfo : "-"}</strong>
           </p>
-          <p>
-            Feedback: <strong>{task.feedback ? task.feedback : "-" }</strong>
-          </p>
+          {task.submittedFiles && (
+            <p>
+              Submitted Files:{" "}
+              <Link target="_blank" className="font-bold">{task.submittedFiles}</Link>
+            </p>
+          )}
+         {task.feedback && <p>
+            Feedback: <strong>{task.feedback}</strong>
+          </p>}
         </DialogContentText>
         {task.submitted && task.feedback == null && (
           <TextField
