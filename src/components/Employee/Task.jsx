@@ -166,12 +166,11 @@ const Task = ({
           <div className="p-4">
             {task.attachment && (
               <Link
-                to={task.path_to_file + task.attachment}
+                to={task.attachment}
                 className="text-blue-500 hover:underline"
                 target={"_blank"}
-                download
               >
-                Download Attachment
+                See Attachments
               </Link>
             )}
             <Timer timerCount={timerCount} />
