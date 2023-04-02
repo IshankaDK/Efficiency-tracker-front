@@ -13,6 +13,7 @@ import EmployerDashBoard from "./components/Employer/EmployerDashBoard";
 import WelcomeNote from "./components/Employer/WelcomeNote";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import Contact from "./components/Contact";
 
 function App() {
   // const [currentUserRole, setCurrentUserRole] = useState(
@@ -96,6 +97,10 @@ function App() {
                   path="/about"
                   element={<EmployerDashBoard children={<About />} />}
                 />
+                <Route
+                  path="/contact"
+                  element={<EmployerDashBoard children={<Contact />} />}
+                />
               </>
             {/* )} */}
             {/* {currentUserRole === "Employee" && ( */}
@@ -139,6 +144,10 @@ function App() {
                 <Route
                   path="/about"
                   element={<EmployeeDashBoard children={<About />} />}
+                />
+                <Route
+                  path="/contact"
+                  element={<EmployeeDashBoard children={<Contact />} />}
                 />
               </>
             {/* )} */}
